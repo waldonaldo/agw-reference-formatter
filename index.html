@@ -49,8 +49,8 @@
 </head>
 <body>
 
-<h1 style="text-align: center;">Ariana Grande Wiki Reference Formatter</h1>
 <img id="logo" src="Wiki-wordmark.png" alt="Wiki Logo">
+<h1 style="text-align: center;">Ariana Grande Wiki Reference Formatter</h1>
 
 <form id="referenceForm">
     <div class="radio-group">
@@ -117,7 +117,7 @@
         formattedVisual += `${formattedDate}.`;
 
         // Source Mode Reference (with <ref> tag)
-        let formattedSource = `<ref><i>${source}</i> - [${url} ${title}]</ref>`;
+        let formattedSource = `<ref><i>${source}</i> - [${url} ${title}]${formattedDate ? ` - Retrieved on ${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}` : ''}</ref>`;
 
         // Display the results
         document.getElementById('formattedVisual').innerHTML = `<strong>Visual Mode:</strong> ${formattedVisual}`;
