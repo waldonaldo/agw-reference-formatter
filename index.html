@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Custom Reference Formatter</title>
+    <title>Ariana Grande Wiki Reference Formatter</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -21,6 +21,14 @@
             width: 100%;
             padding: 5px;
         }
+        .radio-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .radio-group input {
+            margin-right: 5px;
+        }
         button {
             padding: 10px;
             background-color: #4CAF50;
@@ -35,12 +43,14 @@
 </head>
 <body>
 
-<h1>Reference Formatter</h1>
+<h1>Ariana Grande Wiki Reference Formatter</h1>
 
 <form id="referenceForm">
-    <label for="formatType">Select Format Type:</label>
-    <input type="radio" id="social" name="formatType" value="social" checked> Social Media
-    <input type="radio" id="article" name="formatType" value="article"> Article<br><br>
+    <div class="radio-group">
+        <label for="formatType">Select Format Type:</label>
+        <input type="radio" id="social" name="formatType" value="social" checked> Social Media
+        <input type="radio" id="article" name="formatType" value="article"> Article
+    </div>
 
     <label for="source">Source Name (e.g., Twitter, Billboard):</label>
     <input type="text" id="source" name="source" required><br>
@@ -57,6 +67,16 @@
     <label for="date">Date Retrieved (Optional):</label>
     <input type="date" id="date" name="date"><br>
 
+    <label for="refType">Reference Type:</label>
+    <select id="refType" name="refType">
+        <option value="normal">Normal Reference</option>
+        <option value="named">Named Reference</option>
+        <option value="note">Note</option>
+    </select><br>
+
+    <label for="refName" id="refNameLabel" style="display:none;">Reference Name (if named):</label>
+    <input type="text" id="refName" name="refName" style="display:none;"><br>
+
     <button type="button" onclick="formatReference()">Generate Reference</button>
 </form>
 
@@ -64,12 +84,29 @@
 <div id="formattedReference"></div>
 
 <script>
+    const refTypeSelect = document.getElementById('refType');
+    const refNameInput = document.getElementById('refName');
+    const refNameLabel = document.getElementById('refNameLabel');
+
+    // Show/hide reference name input depending on reference type
+    refTypeSelect.addEventListener('change', function() {
+        if (this.value === 'named') {
+            refNameInput.style.display = 'block';
+            refNameLabel.style.display = 'block';
+        } else {
+            refNameInput.style.display = 'none';
+            refNameLabel.style.display = 'none';
+        }
+    });
+
     function formatReference() {
         const source = document.getElementById('source').value;
         const usernameOrAuthor = document.getElementById('usernameOrAuthor').value;
         const title = document.getElementById('title').value;
         const url = document.getElementById('url').value;
         const date = document.getElementById('date').value ? new Date(document.getElementById('date').value) : null;
+        const refType = document.getElementById('refType').value;
+        const refName = document.getElementById('refName').value;
         
         const formatType = document.querySelector('input[name="formatType"]:checked').value;
 
@@ -94,10 +131,18 @@
                 formattedReference += `"${title}"`;
             }
         }
-        
         formattedReference += `${formattedDate}.`;
 
-        document.getElementById('formattedReference').innerHTML = `<a href="${url}">${formattedReference}</a>`;
+        let refTag;
+        if (refType === 'normal') {
+            refTag = `<ref>${formattedReference} [${url}]</ref>`;
+        } else if (refType === 'named') {
+            refTag = `<ref name="${refName}">${formattedReference} [${url}]</ref>`;
+        } else if (refType === 'note') {
+            refTag = `<ref group="note">${formattedReference} [${url}]</ref>`;
+        }
+
+        document.getElementById('formattedReference').innerHTML = `<code>${refTag}</code>`;
     }
 </script>
 
