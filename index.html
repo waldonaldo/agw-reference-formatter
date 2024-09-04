@@ -39,11 +39,18 @@
         button:hover {
             background-color: #45a049;
         }
+        #logo {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 300px; /* Adjust the width if necessary */
+        }
     </style>
 </head>
 <body>
 
-<h1>Ariana Grande Wiki Reference Formatter</h1>
+<h1 style="text-align: center;">Ariana Grande Wiki Reference Formatter</h1>
+<img id="logo" src="Wiki-wordmark.png" alt="Wiki Logo">
 
 <form id="referenceForm">
     <div class="radio-group">
@@ -67,46 +74,21 @@
     <label for="date">Date Retrieved (Optional):</label>
     <input type="date" id="date" name="date"><br>
 
-    <label for="refType">Reference Type:</label>
-    <select id="refType" name="refType">
-        <option value="normal">Normal Reference</option>
-        <option value="named">Named Reference</option>
-        <option value="note">Note</option>
-    </select><br>
-
-    <label for="refName" id="refNameLabel" style="display:none;">Reference Name (if named):</label>
-    <input type="text" id="refName" name="refName" style="display:none;"><br>
-
     <button type="button" onclick="formatReference()">Generate Reference</button>
 </form>
 
-<h3>Your Formatted Reference:</h3>
-<div id="formattedReference"></div>
+<h3>Your Formatted References:</h3>
+<div id="formattedVisual"></div>
+<h4>Source Mode:</h4>
+<div id="formattedSource"></div>
 
 <script>
-    const refTypeSelect = document.getElementById('refType');
-    const refNameInput = document.getElementById('refName');
-    const refNameLabel = document.getElementById('refNameLabel');
-
-    // Show/hide reference name input depending on reference type
-    refTypeSelect.addEventListener('change', function() {
-        if (this.value === 'named') {
-            refNameInput.style.display = 'block';
-            refNameLabel.style.display = 'block';
-        } else {
-            refNameInput.style.display = 'none';
-            refNameLabel.style.display = 'none';
-        }
-    });
-
     function formatReference() {
         const source = document.getElementById('source').value;
         const usernameOrAuthor = document.getElementById('usernameOrAuthor').value;
         const title = document.getElementById('title').value;
         const url = document.getElementById('url').value;
         const date = document.getElementById('date').value ? new Date(document.getElementById('date').value) : null;
-        const refType = document.getElementById('refType').value;
-        const refName = document.getElementById('refName').value;
         
         const formatType = document.querySelector('input[name="formatType"]:checked').value;
 
@@ -117,32 +99,29 @@
             formattedDate = ` - Retrieved on ${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
         }
 
-        let formattedReference = `<i>${source}</i> - `;
+        // Visual Mode Reference
+        let formattedVisual = `<i>${source}</i> - `;
         if (formatType === "social") {
             if (usernameOrAuthor) {
-                formattedReference += `@${usernameOrAuthor} - "${title}"`;
+                formattedVisual += `@${usernameOrAuthor} - "${title}"`;
             } else {
-                formattedReference += `"${title}"`;
+                formattedVisual += `"${title}"`;
             }
         } else {
             if (usernameOrAuthor) {
-                formattedReference += `"${title} by ${usernameOrAuthor}"`;
+                formattedVisual += `"${title} by ${usernameOrAuthor}"`;
             } else {
-                formattedReference += `"${title}"`;
+                formattedVisual += `"${title}"`;
             }
         }
-        formattedReference += `${formattedDate}.`;
+        formattedVisual += `${formattedDate}.`;
 
-        let refTag;
-        if (refType === 'normal') {
-            refTag = `<ref>${formattedReference} [${url}]</ref>`;
-        } else if (refType === 'named') {
-            refTag = `<ref name="${refName}">${formattedReference} [${url}]</ref>`;
-        } else if (refType === 'note') {
-            refTag = `<ref group="note">${formattedReference} [${url}]</ref>`;
-        }
+        // Source Mode Reference (with <ref> tag)
+        let formattedSource = `<ref><i>${source}</i> - [${url} ${title}]</ref>`;
 
-        document.getElementById('formattedReference').innerHTML = `<code>${refTag}</code>`;
+        // Display the results
+        document.getElementById('formattedVisual').innerHTML = `<strong>Visual Mode:</strong> ${formattedVisual}`;
+        document.getElementById('formattedSource').innerHTML = `<strong>Source Mode:</strong> <code>${formattedSource}</code>`;
     }
 </script>
 
