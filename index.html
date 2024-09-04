@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reference Formatter</title>
+    <title>Ariana Grande Wiki Reference Formatter</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -116,15 +116,15 @@
             }
         } else {
             if (usernameOrAuthor) {
-                formattedVisual += `"${title} by ${usernameOrAuthor}"`;
+                formattedVisual += `"${title}" by ${usernameOrAuthor}`;
             } else {
                 formattedVisual += `"${title}"`;
             }
         }
         formattedVisual += `${formattedDate}.`;
 
-        // Generate Source Mode Reference (escape < and > tags to display properly)
-        let formattedSource = `&lt;ref&gt;<i>${source}</i> - [${url} ${title}]${formattedDate}&lt;/ref&gt;`;
+        // Generate Source Mode Reference (italicizing source and including author outside brackets)
+        let formattedSource = `&lt;ref&gt;<i>${source}</i> - [${url} "${title}"]${usernameOrAuthor ? ` by ${usernameOrAuthor}` : ''}${formattedDate}&lt;/ref&gt;`;
 
         // Display the results
         document.getElementById('formattedVisual').innerHTML = `<strong>Visual Mode:</strong> ${formattedVisual}`;
