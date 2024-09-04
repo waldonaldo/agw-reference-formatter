@@ -79,7 +79,6 @@
 
 <h3>Your Formatted References:</h3>
 <div id="formattedVisual"></div>
-<h4>Source Mode:</h4>
 <div id="formattedSource"></div>
 
 <script>
@@ -116,8 +115,8 @@
         }
         formattedVisual += `${formattedDate}.`;
 
-        // Source Mode Reference (with <ref> tag, including retrieval date if available)
-        let formattedSource = `<ref><i>${source}</i> - [${url} ${title}]${formattedDate ? ` - Retrieved on ${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}` : ''}</ref>`;
+        // Source Mode Reference (escape < and > tags to display properly)
+        let formattedSource = `&lt;ref&gt;<i>${source}</i> - [${url} ${title}]${formattedDate ? ` - Retrieved on ${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}` : ''}&lt;/ref&gt;`;
 
         // Display the results
         document.getElementById('formattedVisual').innerHTML = `<strong>Visual Mode:</strong> ${formattedVisual}`;
