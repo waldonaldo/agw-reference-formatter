@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Reference Formatter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, button, select {
+            margin-bottom: 10px;
+            width: 100%;
+            padding: 5px;
+        }
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Reference Formatter</h1>
+
+<form id="referenceForm">
+    <label for="formatType">Select Format Type:</label>
+    <input type="radio" id="social" name="formatType" value="social" checked> Social Media
+    <input type="radio" id="article" name="formatType" value="article"> Article<br><br>
+
+    <label for="source">Source Name (e.g., Twitter, Billboard):</label>
+    <input type="text" id="source" name="source" required><br>
+
+    <label for="usernameOrAuthor">@Username or Author (Optional):</label>
+    <input type="text" id="usernameOrAuthor" name="usernameOrAuthor"><br>
+
+    <label for="title">Article or Post Title:</label>
+    <input type="text" id="title" name="title" required><br>
+
+    <label for="url">URL of the Article/Post:</label>
+    <input type="url" id="url" name="url" required><br>
+
+    <label for="date">Date Retrieved (Optional):</label>
+    <input type="date" id="date" name="date"><br>
+
+    <button type="button" onclick="formatReference()">Generate Reference</button>
+</form>
+
+<h3>Your Formatted Reference:</h3>
+<div id="formattedReference"></div>
+
+<script>
+    function formatReference() {
+        const source = document.getElementById('source').value;
+        const usernameOrAuthor = document.getElementById('usernameOrAuthor').value;
+        const title = document.getElementById('title').value;
+        const url = document.getElementById('url').value;
+        const date = document.getElementById('date').value ? new Date(document.getElementById('date').value) : null;
+        
+        const formatType = document.querySelector('input[name="formatType"]:checked').value;
+
+        let formattedDate = '';
+        if (date) {
+            const monthNames = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"];
+            formattedDate = ` - Retrieved on ${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+        }
+
+        let formattedReference = `<i>${source}</i> - `;
+        if (formatType === "social") {
+            if (usernameOrAuthor) {
+                formattedReference += `@${usernameOrAuthor} - "${title}"`;
+            } else {
+                formattedReference += `"${title}"`;
+            }
+        } else {
+            if (usernameOrAuthor) {
+                formattedReference += `"${title} by ${usernameOrAuthor}"`;
+            } else {
+                formattedReference += `"${title}"`;
+            }
+        }
+        
+        formattedReference += `${formattedDate}.`;
+
+        document.getElementById('formattedReference').innerHTML = `<a href="${url}">${formattedReference}</a>`;
+    }
+</script>
+
+</body>
+</html>
