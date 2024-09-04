@@ -43,7 +43,7 @@
             display: block;
             margin-left: auto;
             margin-right: auto;
-            width: 300px; /* Adjust the width if necessary */
+            width: 300px;
         }
     </style>
 </head>
@@ -116,7 +116,7 @@
         }
         formattedVisual += `${formattedDate}.`;
 
-        // Source Mode Reference (with <ref> tag)
+        // Source Mode Reference (with <ref> tag, including retrieval date if available)
         let formattedSource = `<ref><i>${source}</i> - [${url} ${title}]${formattedDate ? ` - Retrieved on ${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}` : ''}</ref>`;
 
         // Display the results
