@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ariana Grande Wiki Reference Formatter</title>
+    <title>Reference Formatter</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -83,22 +83,30 @@
 
 <script>
     function formatReference() {
-        const source = document.getElementById('source').value;
-        const usernameOrAuthor = document.getElementById('usernameOrAuthor').value;
-        const title = document.getElementById('title').value;
-        const url = document.getElementById('url').value;
-        const date = document.getElementById('date').value ? new Date(document.getElementById('date').value) : null;
-        
+        // Retrieve form values
+        const source = document.getElementById('source').value.trim();
+        const usernameOrAuthor = document.getElementById('usernameOrAuthor').value.trim();
+        const title = document.getElementById('title').value.trim();
+        const url = document.getElementById('url').value.trim();
+        const dateInput = document.getElementById('date').value;
         const formatType = document.querySelector('input[name="formatType"]:checked').value;
 
+        // Validate required fields
+        if (!source || !title || !url) {
+            alert("Please make sure the Source, Title, and URL fields are filled out.");
+            return;
+        }
+
+        // Generate formatted date if provided
         let formattedDate = '';
-        if (date) {
+        if (dateInput) {
+            const date = new Date(dateInput);
             const monthNames = ["January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"];
             formattedDate = ` - Retrieved on ${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
         }
 
-        // Visual Mode Reference
+        // Generate Visual Mode Reference
         let formattedVisual = `<i>${source}</i> - `;
         if (formatType === "social") {
             if (usernameOrAuthor) {
@@ -115,8 +123,8 @@
         }
         formattedVisual += `${formattedDate}.`;
 
-        // Source Mode Reference (escape < and > tags to display properly)
-        let formattedSource = `&lt;ref&gt;<i>${source}</i> - [${url} ${title}]${formattedDate ? ` - Retrieved on ${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}` : ''}&lt;/ref&gt;`;
+        // Generate Source Mode Reference (escape < and > tags to display properly)
+        let formattedSource = `&lt;ref&gt;<i>${source}</i> - [${url} ${title}]${formattedDate}&lt;/ref&gt;`;
 
         // Display the results
         document.getElementById('formattedVisual').innerHTML = `<strong>Visual Mode:</strong> ${formattedVisual}`;
